@@ -16,37 +16,79 @@ import (
 )
 
 var (
-	Q                         = new(Query)
-	Kec                       *kec
+	Q          = new(Query)
+	Account    *account
+	Area       *area
+	Company    *company
+	Kec        *kec
+	Language   *language
+	Pet        *pet
+	Toy        *toy
+	User       *user
+	UserFriend *userFriend
+	UserSpeak  *userSpeak
 )
 
 func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	*Q = *Use(db, opts...)
+	Account = &Q.Account
+	Area = &Q.Area
+	Company = &Q.Company
 	Kec = &Q.Kec
+	Language = &Q.Language
+	Pet = &Q.Pet
+	Toy = &Q.Toy
+	User = &Q.User
+	UserFriend = &Q.UserFriend
+	UserSpeak = &Q.UserSpeak
 }
 
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 	return &Query{
-		db:                        db,
-		Kec:                       newKec(db, opts...),
+		db:         db,
+		Account:    newAccount(db, opts...),
+		Area:       newArea(db, opts...),
+		Company:    newCompany(db, opts...),
+		Kec:        newKec(db, opts...),
+		Language:   newLanguage(db, opts...),
+		Pet:        newPet(db, opts...),
+		Toy:        newToy(db, opts...),
+		User:       newUser(db, opts...),
+		UserFriend: newUserFriend(db, opts...),
+		UserSpeak:  newUserSpeak(db, opts...),
 	}
 }
 
 type Query struct {
 	db *gorm.DB
 
-	Kec                       kec
-
+	Account    account
+	Area       area
+	Company    company
+	Kec        kec
+	Language   language
+	Pet        pet
+	Toy        toy
+	User       user
+	UserFriend userFriend
+	UserSpeak  userSpeak
 }
 
 func (q *Query) Available() bool { return q.db != nil }
 
 func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
-		db:                        db,
-
-		Kec:                       q.Kec.clone(db),
-
+		db:         db,
+		Account:    q.Account.clone(db),
+		Area:       q.Area.clone(db),
+		Company:    q.Company.clone(db),
+		Kec:        q.Kec.clone(db),
+		Language:   q.Language.clone(db),
+		Pet:        q.Pet.clone(db),
+		Toy:        q.Toy.clone(db),
+		User:       q.User.clone(db),
+		UserFriend: q.UserFriend.clone(db),
+		UserSpeak:  q.UserSpeak.clone(db),
 	}
 }
 
@@ -60,20 +102,45 @@ func (q *Query) WriteDB() *Query {
 
 func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 	return &Query{
-		db:                        db,
-
-		Kec:                       q.Kec.replaceDB(db),
-
+		db:         db,
+		Account:    q.Account.replaceDB(db),
+		Area:       q.Area.replaceDB(db),
+		Company:    q.Company.replaceDB(db),
+		Kec:        q.Kec.replaceDB(db),
+		Language:   q.Language.replaceDB(db),
+		Pet:        q.Pet.replaceDB(db),
+		Toy:        q.Toy.replaceDB(db),
+		User:       q.User.replaceDB(db),
+		UserFriend: q.UserFriend.replaceDB(db),
+		UserSpeak:  q.UserSpeak.replaceDB(db),
 	}
 }
 
 type queryCtx struct {
-	Kec                       IKecDo
+	Account    IAccountDo
+	Area       IAreaDo
+	Company    ICompanyDo
+	Kec        IKecDo
+	Language   ILanguageDo
+	Pet        IPetDo
+	Toy        IToyDo
+	User       IUserDo
+	UserFriend IUserFriendDo
+	UserSpeak  IUserSpeakDo
 }
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
-		Kec:                       q.Kec.WithContext(ctx),
+		Account:    q.Account.WithContext(ctx),
+		Area:       q.Area.WithContext(ctx),
+		Company:    q.Company.WithContext(ctx),
+		Kec:        q.Kec.WithContext(ctx),
+		Language:   q.Language.WithContext(ctx),
+		Pet:        q.Pet.WithContext(ctx),
+		Toy:        q.Toy.WithContext(ctx),
+		User:       q.User.WithContext(ctx),
+		UserFriend: q.UserFriend.WithContext(ctx),
+		UserSpeak:  q.UserSpeak.WithContext(ctx),
 	}
 }
 
